@@ -21,6 +21,9 @@ let fruit;
 let fruitX;
 let fruitY;
 let snakeSegments = [{ x: 100, y: 100 }];
+let fpsText;
+let frameCount = 0;
+let startTime;
 
 function create() {
   snake = this.add.graphics({ fillStyle: { color: 0xffffff } });
@@ -43,6 +46,9 @@ function create() {
   });
 
   createFruit(this);
+
+  fpsText = this.add.text(10, 10, 'FPS: 0', { font: '16px Arial', fill: '#ffffff' });
+  startTime = Date.now();
 }
 
 function update() {
@@ -56,6 +62,15 @@ function update() {
     newDirection = Phaser.Math.Vector2.UP;
   } else if (cursors.down.isDown && lastDirection !== Phaser.Math.Vector2.UP) {
     newDirection = Phaser.Math.Vector2.DOWN;
+  }
+
+  frameCount++;
+
+  if (Date.now() - startTime >= 1000) {
+    const fps = Math.round((frameCount * 1000) / (Date.now() - startTime));
+    fpsText.setText('FPS: ' + fps);
+    frameCount = 0;
+    startTime = Date.now();
   }
 }
 
